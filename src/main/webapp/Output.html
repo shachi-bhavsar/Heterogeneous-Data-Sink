@@ -1,0 +1,293 @@
+<form class="form-horizontal" role="form" name="formoutput">
+    <div class="form-group" style="padding:14px; margin-top:20px;">
+        <div class="row">
+            <div class="col-md-1"></div>
+             <div class="col-md-4"> 
+             	<p class="text-primary">Select Database</p></div> 
+             <div class="col-md-3">                                                               
+                <select id="Outputdb_select" style="margin-top: -10px; margin-left:-50px;position: relative;" onchange="getAllDatasetsForHDB('#Outputdb_select','#Outputschema_select');getAllfilters();showFilterDetails();" data-toggle="modal">
+                   <option>--Database--</option>
+                </select>
+             </div>                                  
+        </div>  
+    </div>
+<hr>
+
+<div class="form-group" style="padding:14px; margin-top:20px;">
+        <div class="row">
+            <div class="col-md-1"></div>
+             <div class="col-md-4" style="margin-left:0px ; margin-top:10px;">   
+              <p class="text-primary">Create Filter</p></div> 
+		     <div class="col-md-4" style="margin-left:-50px ; margin-top:0px;">                                
+		          <a class="btn btn-primary"  data-toggle="modal" onclick="clearAll();">New Filter </a>
+		     </div>
+		     
+      	</div>  
+    </div>
+
+    <div class="form-group" style="padding:14px; margin-top:20px;">
+        <div class="row">
+            <div class="col-md-1"></div>
+             <div class="col-md-4">   
+              <p class="text-primary">View Old Filter</p></div> 
+             <div class="col-md-3">                                                           
+                <select id="filter_select" style="margin-top:-10px; margin-left:-50px; position: relative;" data-toggle="modal"  onchange="showFilterDetails();">
+                    <option>--Filter--</option>
+                </select>
+             </div>
+             <div class="col-md-4" style="margin-top:-10px; margin-left:0px;"> 
+                <a class="btn btn-primary pull-left" data-toggle="modal" onclick="checkFilterSelect();">Use Filter </a>
+             </div>                              
+        </div>  
+    </div>
+   
+    <div class="form-group" style="padding:14px; margin-top:20px;">
+      <div class="row">
+       
+          <div class="col-md-1"></div>
+          <div class="col-md-10"> 
+            <div id="view_filter_modal_body_id"></div>
+         
+          </div>
+    </div>
+    </div>
+</form>
+
+<!-- modal starts-->
+
+<div id="display_output_data_model" class="modal fade">
+  <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Result</h4>
+                </div>
+                <div class="modal-body">
+                    <textarea rows="15" cols="40" id="outputbox" placeholder="" >
+                    </textarea>
+                </div>
+                <div style="margin-left: 15px;">
+                   <label>Filename to Save As:</label>
+                   <input id="inputFileNameToSaveAs"></input>
+                   <button type="button" class="btn btn-primary" onclick="saveTextAsFile();">Save Text to File</button>
+                   <div><br></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>                    
+                </div>
+            </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+<div id="create_output_modal" class="modal fade">
+  <div class="modal-dialog">
+        <form class="form"  id="create_output_form">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Select Dataset</h4>
+                </div>
+                <div class="modal-body">
+                   <div class="form-group" >
+                      <label class="col-md-5" for="name" style="margin-top:7px;">Dataset Name:</label>
+                          <div class="col-md-5">
+                                <select id="Outputschema_select" style="margin-top: 0px; position: relative;">
+                                    <option>Select Dataset</option>
+                                </select>
+                          </div>
+                          <div class="clearfix"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                     <a class="btn btn-primary" data-toggle="modal" onclick="checkDSselect();">Next </a>
+                </div>
+            </div><!-- /.modal-content -->
+        </form>
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div id="create_filter_modal" class="modal fade">
+  <div class="modal-dialog">
+        <form class="form"  id="create_output_form">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Give Filter Name</h4>
+                </div>
+                <div class="modal-body">
+                   <div class="form-group" >
+                      <div>
+                        <label class="col-md-3" for="name" style="margin-top:7px;">Filter Name:</label>
+                          <div class="col-md-5">
+                               <input type="text" id="filterName" placeholder="String only" onKeyUp="onKeyPressEventValidation(event,filterName,'filterNameNext')"/> 
+                          </div>
+                          <div class="clearfix"></div>
+                      </div>                         
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                     <a class="btn btn-primary" data-toggle="modal" onclick="filterExist()" style="pointer-events:none" id="filterNameNext">Next </a>
+                </div>
+            </div><!-- /.modal-content -->
+        </form>
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<div id="create_projection_modal" class="modal fade">
+  <div class="modal-dialog">
+        <form class="form"  id="create_display_form">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Select Attributes For Projection</h4>
+                </div>
+                <div class="modal-body">
+                   <div class="form-group" >
+                      <div>
+                        
+                          <div class="col-md-5" id = "attributeList">
+                             <!-- <ul id = "attributeList"></ul>-->
+                          
+                          </div>
+                          <div class="clearfix"></div>
+                      </div>                         
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                     <a class="btn btn-primary" href="#output_attribute_modal"  data-toggle="modal" onclick="getFilterData();"  data-dismiss="modal">Next </a>
+                </div>
+            </div><!-- /.modal-content -->
+        </form>
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+
+<div id="output_attribute_modal" class="modal fade" >
+  <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Create Filter</h4>
+                </div>
+                <div class="modal-body">
+                    <div>
+                       <label class="col-md-3" for="name" style="margin-top:7px;">Filter Attribute:</label>
+                          <div class="col-md-4">                          
+                              <select id="attribute_select" style="margin-top: 0px; position: relative;" onchange="filterSelectObject();">
+                                    <option>Select Attribute</option>
+                                </select>                                                        
+                          </div>
+                          <div class="col-md-4"> 
+                          	<div id="compositeValue" style="margin-left:-40px; position: relative;"></div>  
+                          </div>
+                          <div class="clearfix"></div>
+                    </div>
+                    <div style="margin-top:7px;">
+                        <label class="col-md-3" for="name" style="margin-top:7px;">Operator:</label>
+                          <div class="col-md-5">
+                           <select id="operatorType" style=" position: relative;">
+                                <option value="$eq">&equals;</option>
+                                <option value="$gt">&gt;</option>
+                                <option value="$lt">&lt;</option>
+                                <option value="$gte">&ge;</option>
+                                <option value="$lte">&le;</option>
+                                <option value="$ne">&ne;</option>
+                            </select>    
+                          </div>
+                          <div class="clearfix"></div>
+                    </div>
+                    <div style="margin-top:7px;">
+                        <label class="col-md-3" for="name" style="margin-top:7px;">Value:</label>
+                          <div class="col-md-4">
+                               <input type="text" id="attributeValue" placeholder="" size="15"/> 
+                          </div>
+                          <div class="col-md-4"> 
+                          		<label id="datatype"></label>  
+                          </div>
+                          <div class="clearfix"></div>
+                    </div>
+                    <div style="margin-top:7px;">
+                        <label class="col-md-3" for="name" style="margin-top:7px;">Connector:</label>
+                          <div class="col-md-5">
+                           <select id="connectorType" style=" position: relative;">
+                           		<option value="">Select</option>
+                                <option value="AND">AND</option>
+                                <option value="OR">OR</option>
+                            </select>    
+                          </div>
+                           <button type="button" class="btn btn-primary" id="add_attribute" onclick="getWhereData();">Add</button>
+                        
+                          <div class="clearfix"></div>
+                    </div>
+                    <br/>
+                    <div style="margin-top:7px;">
+                                               
+                          <div class="form-group" style="padding:14px; margin-top:20px;">
+							<table class="table table-bordered" id="viewFilter_div" style="display:none" >
+							    <thead>
+							      <tr>
+							        <th>Filter Attribute</th>
+							        <th>Operator</th>
+							        <th>Value</th>
+							        <th>Connector</th>
+							      </tr>
+							    </thead>
+							    <tbody  id="addFilterAttributes">
+							    </tbody>
+							</table>
+					     </div>
+                       
+                        <div class="clearfix"></div>
+                    </div>
+                   
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                     <button type="button" class="btn btn-primary"  id="input_create_button" onclick="sendfilterData();"  data-dismiss="modal">Apply</button>
+                    <!-- <a class="btn btn-primary" href="#select_output_format_modal" data-dismiss="modal" data-toggle="modal">Next </a> -->
+                </div>
+            </div><!-- /.modal-content -->
+        
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+<div id="select_output_format_modal" class="modal fade">
+  <div class="modal-dialog">
+        <form class="form"  id="create_output_format_form">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Select Output Format</h4>
+                </div>
+                <div class="modal-body">
+				<div class="form-group">
+				<label class="col-md-5" for="name" style="margin-top:7px;">Output Format:</label>
+                          <div class="col-md-5">
+                               <select id="output_select" style="margin-top: 0px; position: relative;">
+				                   
+				                   <option value="JSON">JSON</option>
+				                   <option value="XML">XML</option>
+				                   <option value="CSV">CSV</option>
+			                   </select>
+                          </div>
+                          <div class="clearfix"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                     <a class="btn btn-primary" href="#display_output_data_model" onclick="showRetrivedData();" data-dismiss="modal" data-toggle="modal">Next </a>
+                </div>
+            </div><!-- /.modal-content -->
+        </form>
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

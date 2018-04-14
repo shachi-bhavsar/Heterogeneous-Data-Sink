@@ -1,0 +1,137 @@
+<form class="form-horizontal" role="form" name="forminput">
+    <div class="form-group" style="padding:14px; margin-top:20px;">
+        <div class="row">
+            <div class="col-md-1"></div>
+            <div class="col-md-4"> 
+             	<p class="text-primary">Select Database</p></div> 
+             <div class="col-md-3">                                                            
+                <select id="Inputdb_select" style="margin-top:-10px; margin-left:-30px; position: relative;" onchange="getAllDatasetsForHDB('#Inputdb_select','#Inputschema_select');">
+                  <option>--Database--</option>
+                </select>
+             </div>                               
+            
+        </div>  
+    </div>
+
+    <div class="form-group" style="padding:14px; margin-top:20px;">
+        <div class="row">
+           <div class="col-md-1"></div>
+             <div class="col-md-4"> 
+            	 <p class="text-primary">Select Input Format</p></div>  
+            	
+             <div class="col-md-3">  	                                                            
+                <select id="input_select" style="margin-top: -10px; margin-left:-30px; position: relative;" onchange="displaySeparator();">
+                   <option hidden="true">--Input Format--</option>
+                   <option value="JSON">JSON</option>
+                   <option value="XML">XML</option>
+                   <option value="CSV">CSV</option>
+                </select>
+             </div> 
+        </div>
+    </div>
+    <div class="form-group" style="padding:14px; margin-top:20px;">
+        <div class="row">
+            <div class="col-md-1"></div>
+             <div class="col-md-5" id="div1" style="display:none">                 
+                <select id="separator_select" style="margin-top: 0px; position: relative;">
+                   <option>Select Separator:</option>
+                   <option value="1">,</option>
+                   <option value="2">;</option>
+                   <option value="3">:</option>
+                </select>
+             </div> 
+             <div class="col-md-3">                                   
+                <a class="btn btn-primary" data-toggle="modal" onclick="checkDbSelect();">Next </a>
+            </div>
+        </div>
+    </div>        
+</form>
+
+
+<!-- modal starts-->
+
+<div id="create_input_modal" class="modal fade">
+  <div class="modal-dialog">
+	  	<form class="form"  id="create_input_form">
+	    	<div class="modal-content">
+	      		<div class="modal-header">
+	        		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	        		<h4 class="modal-title">Select Dataset</h4>
+	      		</div>
+	      		<div class="modal-body">
+		           <div class="form-group" >
+		              <label class="col-md-5" for="name" style="margin-top:7px;">Dataset Name:</label>
+				          <div class="col-md-5">
+					            <select id="Inputschema_select"  style="margin-top: 0px; position: relative;" required>
+                   					<option>Select Dataset</option>
+                				</select>
+				          </div>
+				          <div class="clearfix"></div>
+			        </div>
+			    </div>
+			    <div class="modal-footer">
+			        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+			         <a class="btn btn-primary" data-toggle="modal" onclick="example();">Next </a>
+			    </div>
+	    	</div><!-- /.modal-content -->
+	    </form>
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div id="insert_input_file_modal" class="modal fade" >
+  <div class="modal-dialog">
+	    	<div class="modal-content">
+	      		<div class="modal-header">
+	        		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	        		<h4 class="modal-title">Input content</h4>
+	      		</div>
+	      		<div class="modal-body">
+		          	<div>
+		               <label class="col-md-3" for="name" style="margin-top:7px;">Input data:</label>
+				          <div class="col-md-5">
+					           <textarea rows="15" cols="40" id="inputName" placeholder="Enter input content" />
+				          </div>
+				          <div class="clearfix"></div>
+				    </div>
+				    <div style="margin-top:7px;">
+				        <label class="col-md-3" for="name" style="margin-top:7px;">Select Input File:</label>
+				          <div class="col-md-5">
+					       	<input type="file" id="myfile" name="files[]" onchange="getfiledata(event);"></file>   
+				          </div>
+				          <div class="clearfix"></div>
+				    </div>
+				   
+				    <br/>
+				  
+			         
+			    </div>
+			    <div class="modal-footer">
+			        <button type="button" class="btn btn-primary" data-dismiss="modal">Back</button>
+			        <button type="button" class="btn btn-primary"  id="input_create_button" onclick="insertData();">Insert</button>
+			    </div>
+	    	</div><!-- /.modal-content -->
+	    
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div id="input_status_modal" class="modal fade">
+  <div class="modal-dialog">
+	    	<div class="modal-content">
+	      		<div class="modal-header">
+	        		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	        		<h4 class="modal-title">Input Status Info.</h4>
+	      		</div>
+	      		<div class="modal-body">
+		           <div class="form-group" >
+		              <label class="col-md-5" for="name" style="margin-top:7px;">Dataset Name:</label>
+				          <div class="col-md-5" id="printStatus">
+				          </div>
+				          <div class="clearfix"></div>
+			        </div>
+			    </div>
+			    <div class="modal-footer">
+			        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+			    </div>
+	    	</div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

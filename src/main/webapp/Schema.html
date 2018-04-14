@@ -1,0 +1,226 @@
+<form class="form-horizontal" role="form" name="formSchema">
+
+	<div class="form-group" style="padding:14px; margin-top:0px;">
+        <div class="row">
+            <div class="col-md-1"></div>
+            <div class="col-md-4" style="margin-top:10px;"> 
+             	<p class="text-primary">Create Database</p></div>  
+             <div class="col-md-3">     
+            		<a class="btn btn-primary" href="#create_db_modal" data-toggle="modal" style="margin-left:-30px; position: relative;">New Database</a>
+             </div>  	
+         </div>                               
+    </div>
+
+    <div class="form-group" style="padding:14px; margin-top:0px;">
+        <div class="row">
+            <div class="col-md-1"></div>
+            <div class="col-md-4"> 
+             	<p class="text-primary">Select Database</p></div>  
+             <div class="col-md-3">  
+                <select id="db_select" style="margin-top: -10px; margin-left:-30px; position: relative;" onchange="getAllDatasetsForHDB('#db_select','#schema_select'); viewDataset();">
+                   <option hidden="true">--Database--</option>
+                </select>
+             </div>                         
+        
+        </div>  
+    </div>
+    <hr>
+    <div class="form-group" style="padding:14px; margin-top:0px;">
+        <div class="row">
+            <div class="col-md-1"></div>
+            <div class="col-md-4" style="margin-top:10px;"> 
+             	<p class="text-primary">Create Dataset</p></div>  
+             <div class="col-md-3">                                   
+                <a class="btn btn-primary" data-toggle="modal" style="margin-left:-30px; position: relative;" onclick="checkDBSelect();">New Dataset </a>
+            </div>
+        </div>  
+    </div>
+
+    <div class="form-group" style="padding:14px; margin-top:0px;">
+        <div class="row">
+            <div class="col-md-1"></div>
+             <div class="col-md-4">    
+             	<p class="text-primary">Select Dataset</p></div>   
+             <div class="col-md-3">       
+             	<select id="schema_select" style="margin-top:-10px; margin-left:-30px; position: relative;" onchange="viewDataset();">
+                   <option>--Dataset--</option>
+                </select>
+             </div>                               
+        </div>  
+    </div>    
+    
+
+    <div class="form-group" style="padding:60px; margin-top:-40px; margin-bottom:-40px;">
+		<table class="table table-bordered" id="viewDataset_div" style="display:none">
+			<!--  <caption id="dataset_caption" style="text-align: center;"></caption>-->
+		    <thead id="dataset_heading"></thead>
+		    <tbody  id="dataset_table"></tbody>
+		</table>
+	</div>
+</form>
+
+<!-- modal starts-->
+<div id="create_db_modal" class="modal fade">
+  <div class="modal-dialog">
+	  	<form class="form"  id="create_db_form">
+	    	<div class="modal-content">
+	      		<div class="modal-header">
+	        		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	        		<h4 class="modal-title">Create Database</h4>
+	      		</div>
+	      		<div class="modal-body">
+		           <div class="form-group" >
+		              <label class="col-md-5" for="name" style="margin-top:7px;">Enter Database Name:</label>
+				          <div class="col-md-5">
+					           <input type="text" id="dbname" required/>
+				          </div>
+				          <div class="clearfix"></div>
+			        </div>
+			    </div>
+			    <div class="modal-footer">
+			        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+			        <button type="submit" class="btn btn-primary"  id="hdb_create_button" onclick="createHDB();" >Create</button>
+			    </div>
+	    	</div><!-- /.modal-content -->
+	    </form>
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div id="create_dataset_modal" class="modal fade">
+  <div class="modal-dialog">
+	  	<form class="form"  id="create_dataset_form">
+	    	<div class="modal-content">
+	      		<div class="modal-header">
+	        		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	        		<h4 class="modal-title">Create Dataset</h4>
+	      		</div>
+	      		<div class="modal-body">
+		           <div class="form-group" >
+		              <label class="col-md-5" for="name" style="margin-top:7px;">Enter Dataset Name:</label>
+				          <div class="col-md-5">
+					           <input type="text" id="datasetname" onKeyUP="onKeyPressEventValidation(event,datasetname,'datasetnameNext')" />
+				          </div>
+				          <div class="clearfix"></div>
+			        </div>
+			    </div>
+			    <div class="modal-footer">
+			        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+			         <a class="btn btn-primary"  onclick="dataSetExist();" data-toggle="modal" id="datasetnameNext" style="pointer-events:none">Next </a>
+			    </div>
+	    	</div><!-- /.modal-content -->
+	    </form>
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div id="create_datasetFromFile_modal" class="modal fade">
+  <div class="modal-dialog">
+	  	<form class="form"  id="create_dataset_form">
+	    	<div class="modal-content">
+	      		<div class="modal-header">
+	        		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	        		<h4 class="modal-title">Upload sample file for schema</h4>
+	      		</div>
+	      		<div class="modal-body">
+		           <div class="form-group" >
+		              <label class="col-md-5" for="name" style="margin-top:7px;">Sample File:</label>
+				          <div class="col-md-5">
+					           <input type="file" id="myfile" name="files[]" onchange="getSampleFileData(event);"/>
+				          </div>
+				          <div class="clearfix"></div>
+			        </div>
+			        <div class="form-group" style="padding:14px; margin-top:20px;">
+				        <div class="row">
+				            <label class="col-md-5" for="name" style="margin-top:7px;">Select Input Format:
+				            </label> 
+				             <div class="col-md-4">
+				                <select id="format_select" style="margin-top:0px; margin-left:0px; position: relative;" onchange="displaySeparatorForSchema();">
+				                   <option hidden="true">--Input Format--</option>
+				                   <option value="JSON">JSON</option>
+				                   <option value="XML">XML</option>
+				                   <!-- <option value="CSV">CSV</option> -->
+				                </select>
+				             </div> 
+				        </div>
+				        <div class="row">
+				        	<div class="col-md-5"> </div>
+				        	<div class="col-md-4" id="div2" style="display:none">                 
+			                <select id="separator" style="margin-top: 10px; position: relative;">
+			                   <option hidden="true">Select Separator:</option>
+			                   <option value="1">,</option>
+			                   <option value="2">;</option>
+			                   <option value="3">:</option>
+			                </select>
+			             </div>
+				        </div>
+				    </div>
+			    </div>
+			    <div class="modal-footer">
+			        <button type="button" class="btn btn-primary" data-dismiss="modal">Back</button>
+			         <a class="btn btn-primary" href="#insert_attribute_modal"  data-toggle="modal">skip</a>
+			         <a class="btn btn-primary" href="" onclick="createDatasetFromFile();" >create</a>
+			    </div>
+	    	</div><!-- /.modal-content -->
+	    </form>
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+<div id="insert_attribute_modal" class="modal fade" >
+  <div class="modal-dialog">
+	    	<div class="modal-content">
+	      		<div class="modal-header">
+	        		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	        		<h4 class="modal-title">Insert Attributes</h4>
+	      		</div>
+	      		<div class="modal-body">
+		          	<div>
+		               <label class="col-md-3" for="name" style="margin-top:7px;">Name:</label>
+				          <div class="col-md-4">
+					           <input type="text" id="attributename" placeholder="Enter Attribute Name" />
+				          </div>
+				          <div class="clearfix"></div>
+				    </div>
+				    <div style="margin-top:7px;">
+				        <label class="col-md-3" for="name" style="margin-top:7px;">Type:</label>
+				          <div class="col-md-4">
+					       <select id="attributeType" style=" position: relative;">
+		                        <option>String</option>
+		                        <option>Number</option>
+		                        <option>Object</option>
+		                    </select>    
+				          </div>
+				          <div class="clearfix"></div>
+				    </div>
+				    <br/>
+				    <div class="col-md-4">
+				        <button type="button" class="btn btn-primary" id="add_attribute" onclick="addAttribute()">Add</button>
+				        </div>
+				        <div class="clearfix">
+				    </div>
+				    <div style="margin-top:0px; margin-left:30px;">
+				       <div class="form-group" style="padding:14px; margin-top:20px;">
+							<table class="table table-bordered" id="viewAtributes_div" style="display:none" >
+							    <thead>
+							      <tr>
+							        <th>Attribute name</th>
+							        <th>DataType</th>
+							      </tr>
+							    </thead>
+							    <tbody  id="addedAttributes">
+							    </tbody>
+							</table>
+					   </div>
+				    </div>
+				    <br/>
+				    <div style="margin-top:7px;">				    	
+				    </div>			         
+			         
+			    </div>
+			    <div class="modal-footer">
+			        <button type="button" class="btn btn-primary" onclick="clearDiv();" data-dismiss="modal">Back</button>
+			        <button type="button" class="btn btn-primary"  id="schema_create_button" onclick="createDataset();">Create</button>
+			    </div>
+	    	</div><!-- /.modal-content -->
+	    
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
